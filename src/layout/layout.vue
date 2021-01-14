@@ -10,11 +10,15 @@
         </el-col>
         <el-col :span="4" class="userinfo">
           <el-dropdown trigger="hover">
-            <span class="el-dropdown-link userinfo-inner">{{sysUserName}}</span>
+            <span class="el-dropdown-link userinfo-inner">
+              <i data-v-1af266a2="" class="el-icon-user" style="margin-right: 6px;"></i>
+              {{sysUserName}}
+              <i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
             <el-dropdown-menu slot="dropdown">
 <!--              <el-dropdown-item>我的消息</el-dropdown-item>-->
 <!--              <el-dropdown-item>设置</el-dropdown-item>-->
-              <el-dropdown-item divided @click.native="logoutFun">退出登录</el-dropdown-item>
+              <el-dropdown-item @click.native="logoutFun">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>
@@ -31,7 +35,7 @@
             text-color="#ffffff"
             active-text-color="#E6A23C"
           >
-            <el-submenu :index="index + 1" v-for="(item,index) in $router.options.routes"
+            <el-submenu :index="(index + 1).toString()" v-for="(item,index) in $router.options.routes"
                         :key="index" v-if="!item.hidden">
               <template slot="title">
                 <i :class="item.meta.icon" class="tab-icon"></i>
@@ -74,8 +78,8 @@
     name: "home",
     data() {
       return {
-        sysName: '挂号系统',
-        sysUserName: 'admin',
+        sysName: '挂号预约系统',
+        sysUserName: '',
         collapsed: false
       }
     },
@@ -83,9 +87,8 @@
       // 退出登录
       logoutFun:function () {
         this.$confirm('确认退出吗？','提示',{
-
         }).then(() => {
-          sessionStorage.removeItem('user')
+          sessionStorage.clear();
           this.$router.push('/')
         })
       }
@@ -94,8 +97,7 @@
       if (getToken()) {
         getPermission()
       }
-      console.log(this.$router)
-      console.log('skdlfjdf')
+      this.sysUserName = sessionStorage.getItem('username');
     }
   }
 </script>
@@ -123,7 +125,7 @@
           cursor: pointer;
           /*<!--color: $text-color;-->*/
           color: $major-color;
-          font-size: 18px;
+          font-size: 16px;
         }
       }
       .path-name{

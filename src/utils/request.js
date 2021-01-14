@@ -31,11 +31,11 @@ service.interceptors.response.use(
     const res = response.data
     // if !200 start
     if (res.code !== 200) {
-      Message({
-        message: res.massage,
-        type: 'error',
-        duration: 3 * 1000
-      })
+      // Message({
+      //   message: res.massage,
+      //   type: 'error',
+      //   duration: 3 * 1000
+      // })
 
       // code = 401 表示未登录
       // if 401 start
@@ -59,11 +59,11 @@ service.interceptors.response.use(
 
   error => {
     console.log('err' + error)
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 3 * 1000
-    })
+    // Message({
+    //   message: error.message,
+    //   type: 'error',
+    //   duration: 3 * 1000
+    // })
     return Promise.reject(error)
   }
 )

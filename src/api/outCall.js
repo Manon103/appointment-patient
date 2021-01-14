@@ -1,38 +1,45 @@
-import request from '@/utils/request'
+import request from '@/utils/request.js';
 /**
- * 作为所有给医生排版出诊计划的API接口
- * 1、获取全部的出诊计划
- * 2、添加出诊计划
- * 3、修改出诊计划
+ * 用于获取出诊计划的接口
+ * 1 搜索出诊计划,医院-专科-门诊-时间获取
+ * 2 根据医生id，获取出诊信息
+ * 3 获取诊室信息
+ * 4 用户获取就诊记录
+ * 5 获取就诊记录详情
  * **/
-// 1、获取全部的出诊计划
-export function getAllOutCallList(day, pageNum, pageSize, hospitalId, specialId, outpatientId) {
-  return request({
-    url: '/visit/plan/list',
-    method: 'get',
-    params: {day, pageNum, pageSize, hospitalId, specialId, outpatientId}
-  })
+// 1 搜索出诊计划,医院-专科-门诊-时间获取
+export function getOutCall(day, pageNum, pageSize, hospitalId, specialId, outpatientId) {
+	return request({
+		url: '/visit/plan/list?day=' + day + '&pageNum=' + pageNum + '&pageSize=' + pageSize
+		 + '&hospitalId=' + hospitalId + '&specialId=' + specialId + '&outpatientId=' + outpatientId,
+		 method: 'get'
+	})
 }
-// 2、添加出诊计划
-export function addOutCall(data) {
-  return request({
-    url: '/visit/plan',
-    method: 'post',
-    data
-  })
+// 2 根据医生id，获取出诊信息
+export function getOutCallByDoctor(id) {
+	return request({
+		url: '/visit/plan/doctor?doctorId=' + id,
+		method: 'get'
+	})
 }
-// 3、修改出诊计划,id为出诊id
-export function updateOutCall(id, data) {
-  return request({
-    url: '/visit/plan/' + id,
-    method: 'put',
-    data
-  })
+// 3 获取诊室信息
+export function getClinicById(id) {
+	return request({
+		url: '/hospital/clinic/' + id,
+		method: 'get'
+	})
 }
-// 4、删除某条出诊计划,id为出诊id
-export function deleteOutCallById(id) {
-  return request({
-    url: '/visit/plan/' + id,
-    method: 'delete'
-  })
+// 4 用户获取就诊记录
+export function getTreatRecord(cardId, pageNum, pageSize) {
+	return request({
+		url: '/visit/appointment/list?cardId=' + cardId + '&pageNum=' + pageNum + '&pageSize=' + pageSize,
+		method: 'get'
+	})
+}
+// 5 获取就诊记录详情
+export function getTreatRecordDetail(appointmentId) {
+	return request({
+		url: '/visit/appointment/details?appointmentId=' + appointmentId,
+		method: 'get'
+	})
 }

@@ -2,16 +2,19 @@
   <div class="background">
     <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left"
              label-width="0px" class="demo-ruleForm login-container login-background">
-      <h3 class="title">挂号系统后台管理中心</h3>
+      <h3 class="title">挂号预约系统</h3>
       <el-form-item prop="username">
         <el-input type="text" v-model="ruleForm2.username" auto-complete="off"
-                  placeholder="账号" suffix-icon="el-icon-user-solid"></el-input>
+                  placeholder="手机号" suffix-icon="el-icon-user-solid"></el-input>
       </el-form-item>
       <el-form-item prop="password">
         <el-input type="password" v-model="ruleForm2.password" auto-complete="off"
                   placeholder="密码" suffix-icon="el-icon-lock"></el-input>
       </el-form-item>
-      <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
+      <div class="item">
+        <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
+        <el-link type="primary" style="margin: 0px 0px 30px 0px;" @click="toRegister">没有账户?去注册</el-link>
+      </div>
       <el-form-item style="width:100%;">
         <el-button type="primary" style="width:100%;" @click="handleSubmit2" :loading="loading">登录</el-button>
       </el-form-item>
@@ -23,6 +26,8 @@
   import {getCookie, setCookie} from "@/utils/cookies";
   import {getPermission} from "@/permission";
   import {getToken} from "@/utils/auth";
+  import {tips} from "@/common/js/optionTips";
+  import { getUserInfo } from '@/api/login'
 
   export default {
     name: "login",
@@ -34,7 +39,7 @@
           password: ''
         },
         rules2: {
-          username: [{ required: true, message: '请输入账号',trigger: 'blur'}],
+          username: [{ required: true, message: '请输入手机号',trigger: 'blur'}],
           password: [{required: true,message: '请输入密码',trigger: 'blur'}]
         },
         checked: false,
@@ -51,10 +56,9 @@
     },
     methods: {
       handleSubmit2(ev) {
-        var _this = this;
-        _this.$refs.ruleForm2.validate((valid) => {
+        this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
-            _this.loading = true;
+            this.loading = true;
 
             // 实现登录
               this.$store.dispatch('Login', this.ruleForm2).then(() => {
@@ -62,15 +66,20 @@
                 setCookie("username",this.ruleForm2.username,15);
                 setCookie("password",this.ruleForm2.password,15);
               }
-
-              _this.$router.push({path: this.redirect || '/home'});
-              _this.loading = false
-
+              getUserInfo().then(res => {
+                if (res.code === 200) {
+                  sessionStorage.setItem('basicInfo', JSON.stringify(res.data.basicInfo));
+                  sessionStorage.setItem('username', res.data.basicInfo.name);
+                  sessionStorage.setItem('accountID', res.data.account.id)
+                }
+                this.$router.push({path: this.redirect || '/home'});
+                this.loading = false
+              }).catch((err) => {
+                tips('error', '获取医生信息失败')
+              })
             }).catch(() => {
-              _this.loading = false;
-              _this.$alert('用户名或密码错误！', '提示信息', {
-                confirmButtonText: '确定'
-              });
+              this.loading = false;
+              tips('error', '用户名或密码错误！')
             })
           } else {
             console.log('error submit!!');
@@ -78,13 +87,16 @@
           }
         });
 
+      },
+      toRegister(){
+        this.$router.push('/register');
       }
     },
     created() {
       this.ruleForm2.username = getCookie('username');
       this.ruleForm2.password = getCookie('password');
       if(this.ruleForm2.username === undefined||this.ruleForm2.username==null||this.ruleForm2.username===''){
-        this.ruleForm2.username = 'admin';
+        this.ruleForm2.username = '';
       }
       if(this.ruleForm2.password === undefined||this.ruleForm2.password==null){
         this.ruleForm2.password = '';
@@ -93,11 +105,20 @@
   }
 </script>
 
+<style lang="scss">
+  .background {
+    .el-button--primary {
+      background-color: #64a6da;
+      border-color: #64a6da;
+    }
+  }
+</style>
+
 <style scoped>
   .background{
     width: 100%;
     height: 100%;
-    background: url("../.././assets/background.jpg") no-repeat;
+    background: url("../.././assets/back1.jpg") no-repeat;
     background-size: 100% 100%;
     position: fixed;
     top: 0px;
@@ -121,5 +142,11 @@
   }
   .title{
     color: #ffffff;
+    margin-bottom: 20px;
+  }
+  .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 </style>

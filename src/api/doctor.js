@@ -1,73 +1,47 @@
 import request from '@/utils/request'
+
+
 /**
- * 用于获取医生的信息
- * 1、分页获取医生的信息
- * 2、添加医生信息
- * 3、更新医生信息
- * 4、删除医生信息
- * 5、获取出诊时间
- * 6、创建医生管理员
- * 7、获取用户挂自己号的列表
+ * 用于所有的医生的Api接口
+ * 1 通过医生名字获取医生信息
+ * 2 通过专科门诊获取医生信息
+ * 3 通过医生id号获取医生信息
+ * 4 获取医生出诊时间
+ * 5 根据医生编号、日期，获取出诊信息
  * **/
-// 1、分页获取医生的信息
-export function getDoctorList(specialId, outpatientId, pageNum, pageSize, name) {
+ // 1 通过医生名字获取医生信息
+ export function getDcotorByName(pageNum, pageSize, doctorName) {
   return request({
-    url: '/hospital/doctor/list/name',
-    method: 'get',
-    params: {specialId, outpatientId, pageNum, pageSize, name}
-  })
-}
-// 2、添加医生信息
-export function addDoctor(data) {
-  return request({
-    url: '/hospital/doctor',
-    method: 'post',
-    data
-  })
-}
-// 3、更新医生信息
-export function updateDoctor(id, data) {
-  return request({
-    url: '/hospital/doctor/' + id,
-    method: 'put',
-    data
-  })
-}
-// 4、删除医生信息
-export function deleteDoctor(id) {
-  return request({
-    url: '/hospital/doctor/' + id,
-    method: 'delete'
-  })
-}
-// 获取某个医生的信息
-export function getDoctorInfo(doctorId) {
-  return request({
-    url: '/hospital/doctor/' + doctorId,
+    url: '/hospital/doctor/list?pageNum=' + pageNum + '&pageSize=' + pageSize + '&name=' + doctorName,
     method: 'get'
   })
 }
-// 5、获取出诊时间
+// 2 通过专科门诊获取医生信息
+export function getDcotorByDepartment(pageNum, pageSize, specialId, outpatientId) {
+  return request({
+    url: '/hospital/doctor/list/special/outpatient?pageNum=' + pageNum + '&pageSize='
+    + pageSize + '&specialId=' + specialId + '&outpatientId=' + outpatientId,
+    method: 'get'
+  })
+}
+// 3 通过医生id号获取医生信息
+export function getDoctorInfoById(id) {
+  return request({
+    url: '/hospital/doctor/' + id,
+    method: 'get'
+  })
+}
+// 4 获取医生出诊时间
 export function getVisitPlanList(doctorId, startDate, endDate) {
   return request({
-    url: '/visit/plan/doctor',
-    method: 'get',
-    params: {doctorId, startDate, endDate}
+    url: '/visit/plan/doctor?doctorId=' + doctorId + '&startDate=' + startDate + '&endDate=' + endDate,
+    method: 'get'
   })
 }
-// 6、创建医生管理员
-export function createDoctorManager(data) {
+// 5 根据医生编号、日期，获取出诊信息
+export function getHospitalVisitPlan(hospitalId, doctorId, date) {
   return request({
-    url: '/power/account/admin/register',
-    method: 'post',
-    data
-  })
-}
-// 7、获取用户挂自己号的列表
-export function getPatientList(doctorId, date, time, pageNum, pageSize) {
-  return request({
-    url: '/visit/appointment/user',
-    method: 'get',
-    params: {doctorId, date, time, pageNum, pageSize}
+    url: '/visit/plan/doctor/date?hospitalId=' + hospitalId + '&doctorId=' + doctorId + '&date=' + date,
+    method: 'get'
   })
 }

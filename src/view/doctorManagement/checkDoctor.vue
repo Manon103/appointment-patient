@@ -41,7 +41,7 @@
           class="brief"
           maxlength="500"
           show-word-limit
-          disabled="true"
+          disabled
           :autosize="{ minRows: 2, maxRows: 5}">
         </el-input>
       </div>

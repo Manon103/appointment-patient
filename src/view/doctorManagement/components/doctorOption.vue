@@ -5,7 +5,7 @@
       <div class="info-out-box">
         <div class="info-in-box" v-show="doctorData.isEdit">
           <span class="title">编号：</span>
-          <el-input v-model="doctorData.ID" placeholder="请输入内容" class="input-box" :disabled="true"></el-input>
+          <el-input v-model="doctorData.ID" placeholder="请输入内容" class="input-box" disabled></el-input>
         </div>
         <div class="info-in-box">
           <span class="title">姓名：</span>
