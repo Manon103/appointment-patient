@@ -259,6 +259,12 @@
         getCardInfo(){
           getUserCardInfo(sessionStorage.getItem('accountID')).then(res => {
             this.cardList = res.data;
+            if(this.cardList.length > 0){
+              const card = this.cardList.find(item => {
+                return item.type === 0
+              });
+              sessionStorage.setItem('cardId', card ? card.id : '');
+            }
           }).catch(() => {
             tips('error', '获取就诊卡信息失败')
           })

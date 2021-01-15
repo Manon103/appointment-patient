@@ -150,7 +150,8 @@ import { getDepartmentHospital } from '@/api/department';
 import { getOutpatientByHospital } from '@/api/outpatient';
 import { getOutCall } from '@/api/outCall';
 import { getDoctorInfoById, getHospitalVisitPlan } from '@/api/doctor.js';
-  import { getUserCardInfo } from "@/api/login";
+import { getUserCardInfo } from "@/api/login";
+import { addAppoint } from '@/api/appoint';
 export default {
   data(){
     return {
@@ -224,6 +225,7 @@ export default {
       doAppoint: false,
       displayConfirmDialog: false,
       selectedPeriod: '',
+      selectedPeriodIndex: 0,
       selectedPatient: '',
       cardList: []
     }
@@ -353,7 +355,9 @@ export default {
       return new Date().getFullYear() + '-' + month + '-'+ (new Date().getDate() + 1);
     },
     confirmAppoint(index){
+      this.selectedPatient = '';
       this.getCardInfo();
+      this.selectedPeriodIndex = index;
       this.selectedPeriod = this.timeList[this.selectedTime-1]['list'][index].start + '-' + this.timeList[this.selectedTime-1]['list'][index].end;
     },
     //根据账户ID获取就诊卡信息
@@ -367,8 +371,38 @@ export default {
         tips('error', '获取就诊卡信息失败')
       })
     },
+    // 预约
     toAppoint(){
-      
+      // 预约的医生的排班id
+      let time;
+      if(this.visitPlan.length > 1){
+        time = this.visitPlan[this.selectedTime-1].id
+      }else{
+        time = this.visitPlan[0].id
+      }
+      // 预约的时间段
+      let timePeriod;
+      if(this.selectedTime === 1) {
+        timePeriod = this.selectedPeriodIndex + 1
+      } else {
+        timePeriod = this.selectedPeriodIndex + 7
+      }
+      addAppoint({
+        accountId: sessionStorage.getItem('accountID'),
+        cardId: this.selectedPatient,
+        planId: time,
+        timePeriod: timePeriod
+      }).then(res => {
+        if(!res.data){
+          tips('success', '预约成功')
+          this.displayConfirmDialog = false;
+          this.doAppoint = false;
+        }else{
+          tips('error', res.data)
+        }
+      }).catch((err) =>{
+        tips('error', '预约失败')
+      })
     }
   }
 }
