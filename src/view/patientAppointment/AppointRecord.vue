@@ -171,9 +171,15 @@ export default {
                 type: 'warning'
             }).then(() => {
                 cancelAppoint(data.appointmentId).then(res => {
-                    
+                    if(res.code === 200){
+                        tips('success', '取消成功');
+                        this.getAllRecord();
+                    }else{
+                        tips('error', '取消失败');
+                    }
                 })
             }).catch(() => {
+                tips('error', '取消失败');
             });
         },
         handleCurrentChange(page){

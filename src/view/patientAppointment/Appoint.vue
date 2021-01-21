@@ -49,6 +49,8 @@
         <div class="list-item" v-for="item in doctorList" :key="item.outInfo.doctorId">
           <el-card>
             <div class="content">
+              <img src="@/assets/label.svg" class="expert-img" v-if="item.doctorInfo.isExpert">
+              <div class="expert" v-if="item.doctorInfo.isExpert">专家号</div>
               <img src="@/assets/doctor.png" class="image">
               <div class="info">
                 <div class="name"><span>{{item.outInfo.doctorName}}</span><el-link type="primary" @click="showDoctorDetail(item)">预约</el-link></div>
@@ -81,6 +83,10 @@
               <div class="card-content">
                 <span>{{item.start}}-{{item.end}}</span>
                 <div class="operate">
+                  <span class="cost">
+                    <span class="money">{{selectedDoctor.doctorInfo.isExpert ? '50' : '10'}}</span>
+                    元
+                  </span>
                   <span class="count">{{visitPlan[0].residues[i] > 0 ? `余号：${visitPlan[0].residues[i]}` : '已约满'}}</span>
                   <el-link type="primary" v-if="visitPlan[0].residues[i] > 0" @click="confirmAppoint(i)">预约</el-link>
                 </div>
@@ -94,7 +100,11 @@
                   {{item.start}}-{{item.end}}
                 </span>
                 <div class="operate">
-                  <span class="count">{{(visitPlan.length > 1 ? visitPlan[1].residues[i] > 0 : visitPlan[0].residues[i] > 0 ) ? `余号：${visitPlan[0].residues[i]}` : '已约满'}}</span>
+                  <span class="cost">
+                    <span class="money">{{selectedDoctor.doctorInfo.isExpert ? '50' : '10'}}</span>
+                    元
+                  </span>
+                  <span class="count">{{(visitPlan.length > 1 ? visitPlan[1].residues[i] > 0 : visitPlan[0].residues[i] > 0 ) ? `余号：${visitPlan.length > 1 ? visitPlan[1].residues[i] : visitPlan[0].residues[i]}` : '已约满'}}</span>
                   <el-link type="primary" v-if="visitPlan[0].residues[i] > 0" @click="confirmAppoint(i)">预约</el-link>
                 </div>
               </div>
@@ -192,7 +202,10 @@ export default {
             }, {
               start: '11:00',
               end: '11:30'
-            }
+            }, {
+						start: '11:30',
+						end: '12:00'
+					  }
           ]
         }, 
         {
@@ -216,6 +229,12 @@ export default {
             }, {
               start: '16:30',
               end: '17:00'
+            }, {
+              start: '17:00',
+              end: '17:30'
+            }, {
+              start: '17:30',
+              end: '18:00'
             }
           ]
         }
@@ -433,6 +452,9 @@ export default {
       padding: 0;
     }
   }
+  .el-card__body {
+    position: relative;
+  }
   .el-dialog__body {
     padding: 10px 20px;
   }
@@ -490,6 +512,21 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    .expert {
+      position: absolute;
+      top: 4px;
+      left: -2px;
+      padding: 4px 10px;
+      font-size: 12px;
+      color: #5788b9;
+      border-radius: 2px;
+    }
+    .expert-img {
+      height: 30px;
+      position: absolute;
+      left: 0px;
+      top: 2px;
+    }
     .info {
       width: calc(100% - 90px);
       & div:not(:last-child) {
@@ -532,6 +569,12 @@ export default {
       .operate {
         display: flex;
         align-items: center;
+        .cost {
+          margin-right: 20px;
+          .money {
+            color: #e6a23c;
+          }
+        }
         .count {
           margin-right: 15px;
         }

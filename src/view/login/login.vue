@@ -118,8 +118,8 @@
   .background{
     width: 100%;
     height: 100%;
-    background: url("../.././assets/back1.jpg") no-repeat;
-    background-size: 100% 100%;
+    background: url("../.././assets/back1.jpg") no-repeat center center;
+    background-size: cover;
     position: fixed;
     top: 0px;
     left: 0px;
@@ -132,7 +132,7 @@
     margin: 180px auto;
     width: 350px;
     padding: 35px 35px 15px;
-    background: #BED2F5;
+    background: #feffff;
     /*border: 1px solid #eaeaea;*/
     box-shadow: 0 0 25px #A7BBD4;
   }
@@ -141,7 +141,7 @@
     margin: 0px 0px 30px 0px;
   }
   .title{
-    color: #ffffff;
+    color: #34495e;
     margin-bottom: 20px;
   }
   .item {
