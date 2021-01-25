@@ -71,7 +71,6 @@
 </template>
 
 <script>
-  import {getPermission} from "@/permission";
   import {getToken} from "@/utils/auth";
 
   export default {
@@ -94,9 +93,6 @@
       }
     },
     created() {
-      if (getToken()) {
-        getPermission()
-      }
       this.sysUserName = sessionStorage.getItem('username');
     }
   }

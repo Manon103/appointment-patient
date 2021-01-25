@@ -363,8 +363,8 @@ export default {
     },
     validateDate(){
       if(new Date(this.selectedDate) < new Date()){
-        // tips('warning', '请选择有效日期')
-        // this.selectedDate = this.formatDate();
+        tips('warning', '请选择有效日期')
+        this.selectedDate = this.formatDate();
       }
     },
     formatDate(){

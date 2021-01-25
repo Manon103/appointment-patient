@@ -24,7 +24,6 @@
 
 <script>
   import {getCookie, setCookie} from "@/utils/cookies";
-  import {getPermission} from "@/permission";
   import {getToken} from "@/utils/auth";
   import {tips} from "@/common/js/optionTips";
   import { getUserInfo } from '@/api/login'
