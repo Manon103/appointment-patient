@@ -59,7 +59,8 @@
 <script>
 import { getUserCardInfo } from "@/api/login";
 import { tips } from "@/common/js/optionTips";
-import { getTreatRecord, getTreatRecordDetail } from '@/api/outCall.js'
+import { getTreatRecord, getTreatRecordDetail } from '@/api/outCall.js';
+import { formatDate } from '@/utils/filter';
 export default {
     name: 'visitRecord',
     data() {
@@ -70,7 +71,10 @@ export default {
             columns: [
                 {
                     prop: 'day',
-                    label: '日期'
+                    label: '日期',
+                    formatter: val => {
+                        return formatDate(val.day)
+                    }
                 },
                 {
                     prop: 'hospitalName',

@@ -5,7 +5,7 @@ import layout from '@/layout/layout'
 Vue.use(VueRouter)
 
 export let constantRouterMap = [{
-    path: '/',
+    path: '/login',
     component: () => import('@/view/login/login'),
     hidden: true
   },

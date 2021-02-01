@@ -24,6 +24,15 @@ Vue.component('pagePagination',pagePagination);
 import deleteDialog from '@/components/deleteDialog'
 Vue.component('deleteDialog', deleteDialog);
 
+const whiteLoginList = ['/login']
+router.beforeEach((to, from, next) => {
+  if(whiteLoginList.includes(to.path) || sessionStorage.getItem('username')){
+    next();
+  }else{
+    next('/login')
+  }
+})
+
 new Vue({
   el: '#app',
   router,

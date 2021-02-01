@@ -88,7 +88,7 @@
         this.$confirm('确认退出吗？','提示',{
         }).then(() => {
           sessionStorage.clear();
-          this.$router.push('/')
+          this.$router.push('/login')
         })
       }
     },

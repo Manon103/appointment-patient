@@ -370,8 +370,10 @@ export default {
     formatDate(){
       // 格式化日期
       let month = new Date().getMonth() + 1;
-      month = month < 10 ? '0' + month : '';
-      return new Date().getFullYear() + '-' + month + '-'+ (new Date().getDate() + 1);
+      month = month < 10 ? '0' + month : month;
+      let day = new Date().getDate() + 1;
+      day = day < 10 ? '0' + day : day;
+      return new Date().getFullYear() + '-' + month + '-'+ day;
     },
     confirmAppoint(index){
       this.selectedPatient = '';
