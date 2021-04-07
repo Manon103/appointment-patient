@@ -102,7 +102,7 @@ module.exports = {
     stats: { colors: true },
     proxy: {
       '/hospital': {
-        target: 'http://localhost:8080',
+        target: 'http://localhost:8089',
         pathRewrite: { ['^' + process.env.VUE_APP_BASE_API]: '/' },
         changeOrigin: true
       }

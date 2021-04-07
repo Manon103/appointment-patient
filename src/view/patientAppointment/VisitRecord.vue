@@ -27,6 +27,11 @@
                             <el-link type="primary" @click="showRecord(scope.row.appointmentId)">查看</el-link>
                         </template>
                     </el-table-column>
+                    <el-table-column label="操作" :width="200">
+                        <template slot-scope="{row}">
+                            <el-link type="primary" @click="comment(row)">评价留言</el-link>
+                        </template>
+                    </el-table-column>
                 </el-table>
             </el-tab-pane>
         </el-tabs>
@@ -53,6 +58,20 @@
                 <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
             </span>
         </el-dialog>
+        <el-dialog
+            title="留言板"
+            :visible.sync="displayCommentDialog"
+            width="30%">
+            <el-input
+                type="textarea"
+                :autosize="{ minRows: 2, maxRows: 30}"
+                placeholder="请输入内容"
+                v-model="commentContent">
+            </el-input>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="addComment">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -61,6 +80,7 @@ import { getUserCardInfo } from "@/api/login";
 import { tips } from "@/common/js/optionTips";
 import { getTreatRecord, getTreatRecordDetail } from '@/api/outCall.js';
 import { formatDate } from '@/utils/filter';
+import { comment, getCommentbyAppointId } from '@/api/comment';
 export default {
     name: 'visitRecord',
     data() {
@@ -98,7 +118,10 @@ export default {
                 }
             ],
             dialogVisible: false,
-            recordContent: ''
+            recordContent: '',
+            displayCommentDialog: false,
+            commentContent: '',
+            selectedPatient: null
         }
     },
     created() {
@@ -139,6 +162,33 @@ export default {
                 }
             }).catch(() => {
                 tips('error', '获取病历详情失败')
+            })
+        },
+        comment(data){
+            getCommentbyAppointId(data.appointmentId).then(res=> {
+                if(res.code === 200 && res.data.id){
+                    tips('warning', '您已评价过此次就诊')
+                }else{
+                    this.displayCommentDialog = true;
+                    this.commentContent = '';
+                    this.selectedPatient = data;
+                }
+            })
+        },
+        addComment(){
+            const param = {
+                doctorId: this.selectedPatient.doctorId,
+                cardId: this.selectedCard,
+                appointmentId: this.selectedPatient.appointmentId,
+                content: this.commentContent
+            }
+            comment(param).then(res => {
+                if(res.code === 200){
+                    tips('success', '评价成功！')
+                }else{
+                    tips('error', '评价失败！')
+                }
+                this.displayCommentDialog = false;
             })
         }
     },
